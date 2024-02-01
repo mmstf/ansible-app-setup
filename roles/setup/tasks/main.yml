@@ -1,0 +1,22 @@
+---
+# tasks file for roles/setup
+
+# 1. Basic setups
+- name: Basic setups
+  include_tasks: basic-setups.yml
+
+# 2. sysctl setups
+- name: Sysctl setups
+  include_tasks: sysctl-setup.yml
+
+# 3. nginx setup
+- name: nginx setups
+  include_tasks: nginx-setup.yml
+
+# 4. docker and docker-compose installation
+- name: docker and docker-compose setups
+  include_tasks: docker-setup.yml
+
+# 5. application setup and run with docker
+- name: application setups
+  include_tasks: application-setup.yml

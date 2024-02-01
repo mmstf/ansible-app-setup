@@ -1,0 +1,53 @@
+---
+
+- name: Application folder setup
+  file:
+    path: "{{ app_root_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Downloads folder setup
+  file:
+    path: "{{ download_dir }}"
+    state: directory
+    mode: 0755
+
+- name: copy Dockerfile
+  copy:
+    src: Dockerfile
+    dest: "{{ app_root_dir }}"
+    mode: 0644
+
+- name: copy docker-compose
+  copy:
+    src: docker-compose.yaml
+    dest: "{{ app_root_dir }}"
+    mode: 0644
+
+- name: Download app from github
+  git:
+    repo: "{{ repo_address }}"
+    dest: "{{ download_dir }}/Task-manager-app"
+    update: yes
+    force: yes
+
+- name: Copy app files to correct dir
+  copy:
+    src: "{{ download_dir }}/Task-manager-app/"
+    dest: "{{ app_root_dir }}"
+    remote_src: yes
+
+
+- name: Build app image - run Dockerfile
+  docker_image:
+    name: mstf/ansible-node-app
+    tag: v.0.1
+    source: build
+    build:
+      path: "{{ app_root_dir }}"
+
+
+- name: Run docker-compose
+  docker_compose:
+    project_src: "{{ app_root_dir }}"
+    state: present

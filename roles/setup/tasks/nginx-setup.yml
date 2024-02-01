@@ -1,0 +1,47 @@
+---
+
+- name: Nginx installation
+  apt:
+    name: nginx
+    state: latest
+
+- name: Delete start page
+  file:
+    path: /var/www/html/*
+    state: absent
+
+- name: Copy nginx.conf
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: 0644
+
+
+- name: Copy new nginx site file
+  copy:
+    src: mstf.uz.conf
+    dest: /etc/nginx/sites-available/mstf.uz.conf
+    mode: 0644
+
+- name: Test nginx for rightness
+  shell: nginx -t
+  register: nginx_status
+  failed_when: "'failed' in nginx_status.stderr"
+  notify: Restart web server
+
+
+#  check if nginx is ok, nginx -t
+
+- name: Make site enabled
+  file:
+    src: /etc/nginx/sites-available/mstf.uz.conf
+    dest: /etc/nginx/sites-enabled/mstf.uz.conf
+    owner: root
+    group: root
+    state: link
+
+- name: Nginx enabling on os boot
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

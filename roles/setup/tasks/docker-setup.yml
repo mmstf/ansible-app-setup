@@ -1,0 +1,33 @@
+---
+
+- name: Docker.io installation
+  apt:
+    name: docker.io
+    state: latest
+
+- name: Install Docker
+  apt:
+    name: docker-compose
+    state: latest
+
+- name: Restart OS to boot Docker
+  reboot:
+  async: 1
+  poll: 0
+
+- name: Wait for OS reboot
+  wait_for_connection:
+    delay: 5
+    timeout: 10
+
+#- name: Unmusk Docker
+#  systemd:
+#    name: docker
+#    masked: false
+
+- name: Start Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+#  shell: dockerd

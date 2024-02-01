@@ -1,0 +1,20 @@
+---
+
+- name: Check connections
+  ping:
+
+- name: Turn off passwd auth
+  lineinfile:
+    path: /etc/ssh/ssh_config
+    search_string: PasswordAuthentication
+    line: PasswordAuthentication no
+
+- name: Add Friend's ssh key
+  lineinfile:
+    path: /root/.ssh/authorized_keys
+    create: true
+    line: "{{ mbpro_ssh_key }}"
+
+- name: Update and upgrade packages
+  apt:
+    upgrade: yes

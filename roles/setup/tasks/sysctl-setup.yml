@@ -1,0 +1,26 @@
+---
+
+- name: Sysctl setup
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+  loop:
+    - { name: fs.file-max, value: 1000000 }
+    - { name: fs.nr_open, value: 1000000 }
+    - { name: fs.file-max, value: 65536 }
+    - { name: net.core.somaxconn, value: 65535 }
+    - { name: net.core.rmem_max, value: 16777216 }
+    - { name: net.core.wmem_max, value: 16777216 }
+    - { name: net.core.netdev_max_backlog, value: 65536 }
+    - { name: net.ipv4.tcp_tw_reuse, value: 1 }
+    - { name: net.ipv4.tcp_tw_recycle, value: 1 }
+    - { name: net.ipv4.tcp_max_syn_backlog, value: 65535 }
+    - { name: net.ipv4.tcp_max_orphans, value: 65535 }
+    - { name: net.ipv4.tcp_syncookies, value: 1 }
+  ignore_errors: true
+
+
+- name: Reload sysctl service
+  shell: sysctl --system
+#  sysctl:
+#    reload: true

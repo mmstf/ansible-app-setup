@@ -1,0 +1,9 @@
+---
+- name: Application setup to the host
+  hosts: alisa
+  any_errors_fatal: true
+  become: yes
+
+  roles:
+    - role: setup
+
