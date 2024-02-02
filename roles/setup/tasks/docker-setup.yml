@@ -4,26 +4,26 @@
   apt:
     name: docker.io
     state: latest
+  register: docker_install_response
 
 - name: Install Docker
   apt:
     name: docker-compose
     state: latest
 
+
 - name: Restart OS to boot Docker
   reboot:
   async: 1
   poll: 0
+  when: docker_install_response.changed == true
 
 - name: Wait for OS reboot
   wait_for_connection:
     delay: 5
     timeout: 10
+  when: docker_install_response.changed == true
 
-#- name: Unmusk Docker
-#  systemd:
-#    name: docker
-#    masked: false
 
 - name: Start Docker
   systemd:
