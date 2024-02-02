@@ -6,7 +6,7 @@
     state: latest
   register: docker_install_response
 
-- name: Install Docker
+- name: Install Docker compose
   apt:
     name: docker-compose
     state: latest
@@ -30,4 +30,3 @@
     name: docker
     state: started
     enabled: yes
-#  shell: dockerd
