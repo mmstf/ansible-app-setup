@@ -1,28 +1,24 @@
 ---
 
-- name: Application folder setup
+- name: App folder and Downloads folder setup
   file:
-    path: "{{ app_root_dir }}"
+    path: "{{ item }}"
     state: directory
     mode: 0755
+  loop:
+    - "{{ app_root_dir }}"
+    - "{{ download_dir }}"
 
-- name: Downloads folder setup
-  file:
-    path: "{{ download_dir }}"
-    state: directory
-    mode: 0755
 
-- name: copy Dockerfile
+- name: Copy docker files
   copy:
-    src: Dockerfile
+    src: "{{ item.filename }}"
     dest: "{{ app_root_dir }}"
     mode: 0644
+  loop:
+    - { filename: "Dockerfile" }
+    - { filename: docker-compose.yaml }
 
-- name: copy docker-compose
-  copy:
-    src: docker-compose.yaml
-    dest: "{{ app_root_dir }}"
-    mode: 0644
 
 - name: Download app from github
   git:
@@ -30,6 +26,7 @@
     dest: "{{ download_dir }}/Task-manager-app"
     update: yes
     force: yes
+
 
 - name: Copy app files to correct dir
   copy:
