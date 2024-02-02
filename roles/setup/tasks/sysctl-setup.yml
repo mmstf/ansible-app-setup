@@ -22,5 +22,3 @@
 
 - name: Reload sysctl service
   shell: sysctl --system
-#  sysctl:
-#    reload: true

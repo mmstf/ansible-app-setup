@@ -16,21 +16,17 @@
     dest: /etc/nginx/nginx.conf
     mode: 0644
 
-
 - name: Copy new nginx site file
   copy:
     src: mstf.uz.conf
     dest: /etc/nginx/sites-available/mstf.uz.conf
     mode: 0644
 
-- name: Test nginx for rightness
+- name: Test nginx for correct configurations
   shell: nginx -t
   register: nginx_status
   failed_when: "'failed' in nginx_status.stderr"
   notify: Restart web server
-
-
-#  check if nginx is ok, nginx -t
 
 - name: Make site enabled
   file:
